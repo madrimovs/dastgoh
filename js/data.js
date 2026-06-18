@@ -15,9 +15,9 @@ window.DASTGOH_SEED = {
   },
   labOrder: ["prod", "standart", "elektronika"],
   labs: {
-    prod:        { name: "Ishlab chiqarish maydoni", code: "" },
-    standart:    { name: "Standartlashtirish laboratoriyasi", code: "109" },
-    elektronika: { name: "Elektronika va Robototexnika laboratoriyasi", code: "R-1" }
+    prod:        { name: "Ishlab chiqarish maydoni", code: "", short: "Ishlab chiqarish" },
+    standart:    { name: "Standartlashtirish laboratoriyasi", code: "109", short: "Standartlashtirish (109)" },
+    elektronika: { name: "Elektronika va Robototexnika laboratoriyasi", code: "R-1", short: "Elektronika (R-1)" }
   },
   // status: "ishlaydi" = Ishchi holatida, "tamir" = Ta'mirtalab
   machines: [

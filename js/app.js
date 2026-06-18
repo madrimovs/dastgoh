@@ -28,9 +28,11 @@
 
   function renderLabFilters() {
     var order = Store.labOrder();
-    var html = '<button class="filter active" data-lab="all">Barcha laboratoriyalar</button>';
+    var labs = Store.labs();
+    var html = '<button class="filter active" data-lab="all">Barchasi</button>';
     order.forEach(function (key) {
-      html += '<button class="filter" data-lab="' + esc(key) + '">' + esc(Store.labName(key)) + '</button>';
+      var lbl = (labs[key] && labs[key].short) ? labs[key].short : Store.labName(key);
+      html += '<button class="filter" data-lab="' + esc(key) + '">' + esc(lbl) + '</button>';
     });
     els.labFilters.innerHTML = html;
   }
@@ -48,16 +50,18 @@
   function card(m) {
     var img = m.img
       ? '<img src="' + esc(m.img) + '" alt="' + esc(m.name) + '" loading="lazy" />'
-      : '<div style="color:var(--muted);font-size:13px;">Rasm yo\'q</div>';
-    var qty = m.qty && m.qty > 1 ? ' <span class="chip">' + m.qty + ' ta</span>' : "";
+      : '<div style="color:var(--muted);font-size:12px;">Rasm yo\'q</div>';
+    var qty = m.qty && m.qty > 1 ? ' <span class="qty">' + m.qty + '×</span>' : "";
+    var dotCls = m.status === "tamir" ? "cdot-repair" : "cdot-ok";
+    var stTitle = m.status === "tamir" ? "Ta'mirtalab" : "Ishchi holatida";
     return '' +
       '<a class="card" href="machine.html?id=' + esc(m.id) + '">' +
         '<div class="thumb">' + img + '</div>' +
         '<div class="body">' +
-          '<div class="row"><span class="id-tag">#' + esc(m.id) + '</span>' + UI.statusBadge(m.status) + '</div>' +
+          '<div class="row"><span class="id-tag">#' + esc(m.id) + '</span>' +
+            '<span class="cdot ' + dotCls + '" title="' + stTitle + '"></span></div>' +
           '<div class="title">' + esc(m.name) + qty + '</div>' +
           (m.model ? '<div class="model">' + esc(m.model) + '</div>' : '') +
-          '<div class="func">' + esc(m.func || "") + '</div>' +
         '</div>' +
       '</a>';
   }
