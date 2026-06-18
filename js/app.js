@@ -52,14 +52,12 @@
       ? '<img src="' + esc(m.img) + '" alt="' + esc(m.name) + '" loading="lazy" />'
       : '<div style="color:var(--muted);font-size:12px;">Rasm yo\'q</div>';
     var qty = m.qty && m.qty > 1 ? ' <span class="qty">' + m.qty + '×</span>' : "";
-    var dotCls = m.status === "tamir" ? "cdot-repair" : "cdot-ok";
-    var stTitle = m.status === "tamir" ? "Ta'mirtalab" : "Ishchi holatida";
     return '' +
       '<a class="card" href="machine.html?id=' + esc(m.id) + '">' +
         '<div class="thumb">' + img + '</div>' +
         '<div class="body">' +
           '<div class="row"><span class="id-tag">#' + esc(m.id) + '</span>' +
-            '<span class="cdot ' + dotCls + '" title="' + stTitle + '"></span></div>' +
+            UI.statusBadge(m.status) + '</div>' +
           '<div class="title">' + esc(m.name) + qty + '</div>' +
           (m.model ? '<div class="model">' + esc(m.model) + '</div>' : '') +
         '</div>' +
