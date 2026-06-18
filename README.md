@@ -24,7 +24,7 @@ mo'ljallangan, lekin barcha qurilmalarga moslashadi.
 
 | Login  | Parol  |
 |--------|--------|
-| `sardor` | `sardor` |
+
 
 > Eslatma: bu front-end darajasidagi oddiy himoya (statik sayt uchun). Jiddiy
 > maxfiylik talab qilinsa, server tomonida autentifikatsiya qo'shilishi kerak.
