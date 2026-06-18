@@ -1,0 +1,4 @@
+# Statik sayt — build talab qilinmaydi.
+[build]
+  publish = "."
+  command = ""

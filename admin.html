@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Admin — INNO Texnopark dastgohlari</title>
+  <meta name="theme-color" content="#0b2a5b" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <span class="logo">IT</span>
+        <span class="brand-text">
+          <b>INNO Texnopark</b>
+          <span>Boshqaruv paneli</span>
+        </span>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Katalog</a>
+        <a href="admin.html" class="active">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- LOGIN -->
+  <main class="container" id="loginView" style="display:none;">
+    <div class="auth-wrap">
+      <form class="auth-card" id="loginForm" autocomplete="off">
+        <h1>Boshqaruv paneli</h1>
+        <p class="sub">Davom etish uchun administrator sifatida tizimga kiring.</p>
+        <div class="form-err" id="loginErr" style="display:none;"></div>
+        <div class="field">
+          <label for="login">Login</label>
+          <input id="login" type="text" placeholder="Login" required />
+        </div>
+        <div class="field">
+          <label for="password">Parol</label>
+          <input id="password" type="password" placeholder="Parol" required />
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Kirish</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- DASHBOARD -->
+  <main class="container" id="adminView" style="display:none;">
+    <div class="admin-bar">
+      <h1 id="adminTitle">Dastgohlar boshqaruvi</h1>
+      <div class="admin-actions">
+        <button class="btn btn-primary btn-sm" id="addBtn">+ Yangi dastgoh</button>
+        <button class="btn btn-ghost btn-sm" id="qrSheetBtn">Barcha QR kodlar</button>
+        <button class="btn btn-ghost btn-sm" id="exportBtn">Export (data.js)</button>
+        <button class="btn btn-ghost btn-sm" id="resetBtn">Tiklash</button>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Chiqish</button>
+      </div>
+    </div>
+
+    <div class="notice" id="storeNotice"></div>
+    <div class="stats" id="adminStats" style="margin-bottom:14px;"></div>
+
+    <!-- Jadval ko'rinishi -->
+    <div id="tableView">
+      <div class="table-wrap">
+        <table class="admin">
+          <thead>
+            <tr>
+              <th style="width:40px;">#</th>
+              <th style="width:64px;">Rasm</th>
+              <th>Nomi / Modeli</th>
+              <th class="hide-sm">Holati</th>
+              <th style="text-align:right;">Amallar</th>
+            </tr>
+          </thead>
+          <tbody id="adminRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- QR varaq ko'rinishi -->
+    <div id="sheetView" style="display:none;">
+      <div class="admin-bar no-print">
+        <h1>QR kodlar varag'i</h1>
+        <div class="admin-actions">
+          <button class="btn btn-primary btn-sm" id="printSheetBtn">Chop etish</button>
+          <button class="btn btn-ghost btn-sm" id="backFromSheet">&larr; Orqaga</button>
+        </div>
+      </div>
+      <p class="notice no-print">Har bir dastgoh uchun QR kod modeli va nomi bilan. Chop etib, dastgohlarga yopishtirishingiz mumkin.</p>
+      <div class="qr-sheet" id="qrSheet"></div>
+    </div>
+  </main>
+
+  <!-- Add/Edit modal -->
+  <div class="modal-overlay" id="formModal">
+    <div class="modal">
+      <header>
+        <h2 id="formTitle">Yangi dastgoh</h2>
+        <button class="x" data-close>&times;</button>
+      </header>
+      <form id="machineForm">
+        <div class="modal-body">
+          <input type="hidden" id="f_id" />
+          <div class="grid2">
+            <div class="field">
+              <label for="f_lab">Laboratoriya</label>
+              <select id="f_lab"></select>
+            </div>
+            <div class="field">
+              <label for="f_status">Holati</label>
+              <select id="f_status">
+                <option value="ishlaydi">Ishchi holatida</option>
+                <option value="tamir">Ta'mirtalab</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f_name">Nomi *</label>
+            <input id="f_name" type="text" required placeholder="Masalan: Tokar stanogi" />
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label for="f_model">Modeli</label>
+              <input id="f_model" type="text" placeholder="Masalan: GHB-1340A" />
+            </div>
+            <div class="field">
+              <label for="f_qty">Soni</label>
+              <input id="f_qty" type="number" min="1" value="1" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="f_func">Vazifasi</label>
+            <input id="f_func" type="text" placeholder="Qisqacha vazifasi" />
+          </div>
+          <div class="field">
+            <label for="f_desc">Tavsifi</label>
+            <textarea id="f_desc" placeholder="Dastgoh haqida to'liqroq tavsif"></textarea>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label for="f_caps">Imkoniyatlari</label>
+              <textarea id="f_caps" placeholder="Har bir imkoniyat yangi qatorda"></textarea>
+              <div class="hint">Har bir bandni alohida qatorga yozing.</div>
+            </div>
+            <div class="field">
+              <label for="f_works">Bajariladigan ishlar</label>
+              <textarea id="f_works" placeholder="Har bir ish yangi qatorda"></textarea>
+              <div class="hint">Har bir bandni alohida qatorga yozing.</div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f_note">Izoh</label>
+            <input id="f_note" type="text" placeholder="Masalan: Elektr tizimida muammo bor" />
+          </div>
+          <div class="field">
+            <label for="f_img">Rasm (manzil yoki URL)</label>
+            <input id="f_img" type="text" placeholder="assets/img/imageN.jpeg yoki https://..." />
+            <div class="hint">Yoki qurilmangizdan rasm tanlang:
+              <input id="f_imgFile" type="file" accept="image/*" style="margin-top:6px;" />
+            </div>
+            <div id="imgPreviewWrap" style="margin-top:10px;display:none;">
+              <img id="imgPreview" style="max-height:120px;border:1px solid var(--line);border-radius:8px;" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" data-close>Bekor qilish</button>
+          <button type="submit" class="btn btn-primary">Saqlash</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- QR modal (single) -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal" style="max-width:380px;">
+      <header>
+        <h2>QR kod</h2>
+        <button class="x" data-close-qr>&times;</button>
+      </header>
+      <div class="modal-body qr-modal-box">
+        <div class="qr-box" id="qrModalBox"></div>
+        <div class="qr-cap" id="qrModalCap"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;word-break:break-all;" id="qrModalUrl"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" data-close-qr>Yopish</button>
+        <button class="btn btn-primary" id="qrModalDl">PNG yuklab olish</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer no-print">
+    <div class="container" id="footMeta"></div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/qrcode.min.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
